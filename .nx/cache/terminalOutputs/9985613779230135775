@@ -1,0 +1,137 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[37mApplication bundle generation failed. [5.611 seconds][39m
+[37m[39m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2741: Property 'chain' is missing in type '{ id: string; pointId: string; title: string; severity: "重大"; status: "待负责人审批"; openedAt: string; owner: string; triggerReadingId: string; observedValue: string; version: number; closedAt: string; fieldReviews: { ...; }[]; opinions: ({ ...; } | { ...; })[]; plan: { ...; }; }' but required in type 'Anomaly'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/data/seed.ts:24:4:[39m[22m
+[1m[31m[37m      24 │     [32m{[37m[39m[22m
+[1m[31m         ╵     [32m^[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m  'chain' is declared here.[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/domain/models.ts:148:2:[39m[22m
+[1m[31m[37m      148 │   [32mchain[37m: ChainRevision[][39m[22m
+[1m[31m          ╵   [32m~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2741: Property 'chain' is missing in type '{ id: string; pointId: string; title: string; severity: "较高"; status: "原因调查中"; openedAt: string; owner: string; triggerReadingId: string; observedValue: string; version: number; closedAt: string; fieldReviews: undefined[]; opinions: { ...; }[]; plan: { ...; }; }' but required in type 'Anomaly'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/data/seed.ts:33:4:[39m[22m
+[1m[31m[37m      33 │     [32m{[37m[39m[22m
+[1m[31m         ╵     [32m^[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m  'chain' is declared here.[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/domain/models.ts:148:2:[39m[22m
+[1m[31m[37m      148 │   [32mchain[37m: ChainRevision[][39m[22m
+[1m[31m          ╵   [32m~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type '{ kind: string; text: string; }' is not assignable to type '{ kind: "applied" | "conflict" | "duplicate" | "rejected" | "info"; text: string; }'.[39m[22m
+[1m[31m  Types of property 'kind' are incompatible.[39m[22m
+[1m[31m    Type 'string' is not assignable to type '"applied" | "conflict" | "duplicate" | "rejected" | "info"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:53:4:[39m[22m
+[1m[31m[37m      53 │     [32mnotice[37m: pendingWrites.length[39m[22m
+[1m[31m         ╵     [32m~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m[1m[31m  The expected type comes from property 'notice' which is declared here on type 'TailingsState'[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:19:2:[39m[22m
+[1m[31m[37m      19 │   [32mnotice[37m: { kind: 'applied' | 'conflict' | 'duplicate' | 'rejected...[39m[22m
+[1m[31m         ╵   [32m~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, req: { commandId: string; anomalyId: string; operator: string; baseVersion: number; command: ReviewCommand; createdAt: string; } & Action<...> & { ...; }) => { ...; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Submit Review", (props: { commandId: string; anomalyId: string; operator: string; baseVersion: number; command: ReviewCommand; createdAt: string; }) => { ...; } & Action<...>>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ notice: { kind: string; text: string; }; dataset: TailingsDataset; loading: boolean; error: string; selectedAnomalyId: string; keyword: string; status: AnomalyStatus | "全部"; pendingWrites: PendingWrite[]; conflictDrafts: ConflictDraft[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'notice.kind' are incompatible between these types.[39m[22m
+[1m[31m      Type 'string' is not assignable to type '"applied" | "conflict" | "duplicate" | "rejected" | "info"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:59:35:[39m[22m
+[1m[31m[37m      59 │   on(TailingsActions.submitReview, [32m(state, req) => {[37m[39m[22m
+[1m[31m         ╵                                    [32m~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, req: { commandId: string; anomalyId: string; operator: string; baseVersion: number; command: ReviewCommand; createdAt: string; } & Action<...> & { ...; }) => { ...; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Commit Review", (props: { commandI[39m[22m[1m[31md: string; anomalyId: string; operator: string; baseVersion: number; command: ReviewCommand; createdAt: string; }) => { ...; } & Action<...>>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ dataset: TailingsDataset; pendingWrites: PendingWrite[]; notice: { kind: string; text: string; }; loading: boolean; error: string; selectedAnomalyId: string; keyword: string; status: AnomalyStatus | "全部"; conflictDrafts: ConflictDraft[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'notice.kind' are incompatible between these types.[39m[22m
+[1m[31m      Type 'string' is not assignable to type '"applied" | "conflict" | "duplicate" | "rejected" | "info"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:81:35:[39m[22m
+[1m[31m[37m      81 │   on(TailingsActions.commitReview, [32m(state, req) => {[37m[39m[22m
+[1m[31m         ╵                                    [32m~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, { commandId, error }: { commandId: string; error: string; } & Action<"[Tailings] Write Failed"> & { type: "[Tailings] Write Failed"; }) => { pendingWrites: PendingWrite[]; ... 7 more ...; conflictDrafts: ConflictDraft[]; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Write Failed", (props: { commandId: string; error: string; }) => { commandId: string; error: string; } & Action<"[Tailings] Write Failed">>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ pendingWrites: PendingWrite[]; notice: { kind: string; text: string; }; dataset: TailingsDataset; loading: boolean; error: string; selectedAnomalyId: string; keyword: string; status: AnomalyStatus | "全部"; conflictDrafts: ConflictDraft[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'notice.kind' are incompatible between these types.[39m[22m
+[1m[31m      Type 'string' is not assignable to type '"applied" | "conflict" | "duplicate" | "rejected" | "inf[39m[22m[1m[31mo"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:114:34:[39m[22m
+[1m[31m[37m      114 │   on(TailingsActions.writeFailed, [32m(state, { commandId, error }) => {[37m[39m[22m
+[1m[31m          ╵                                   [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type '{ status: string; attempts: number; updatedAt: string; commandId: string; anomalyId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; operator: string; ... 4 more ...; snapshot: ReviewBasisSnapshot; }[]' is not assignable to type 'PendingWrite[]'.[39m[22m
+[1m[31m  Type '{ status: string; attempts: number; updatedAt: string; commandId: string; anomalyId: string; kind: ChainRevision["kind"]; operator: string; baseVersion: number; payload: Record<string, unknown>; lastError: string; createdAt: string; snapshot: ReviewBasisSnapshot; }' is not assignable to type 'PendingWrite'.[39m[22m
+[1m[31m    Types of property 'status' are incompatible.[39m[22m
+[1m[31m      Type 'string' is not assignable to type '"发送失败" | "待发送"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:130:4:[39m[22m
+[1m[31m[37m      130 │     [32mpendingWrites[37m: state.pendingWrites.map((item) =>[39m[22m
+[1m[31m          ╵     [32m~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m  The expected type comes from property 'pendingWrites' which is declared here on type 'TailingsState'[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:15:2:[39m[22m
+[1m[31m[37m      15 │   [32mpendingWrites[37m: PendingWrite[][39m[22m
+[1m[31m         ╵   [32m~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, { commandId }: { commandId: string; } & Action<"[Tailings] Discard Write"> & { type: "[Tailings] Discard Write"; }) => { pendingWrites: PendingWrite[]; ... 7 more ...; conflictDrafts: ConflictDraft[]; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Discard Write", (props:[39m[22m[1m[31m { commandId: string; }) => { commandId: string; } & Action<"[Tailings] Discard Write">>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ pendingWrites: PendingWrite[]; dataset: { audit: AuditEntry[]; points: MonitoringPoint[]; thresholds: Threshold[]; readings: RawReading[]; anomalies: Anomaly[]; }; ... 6 more ...; conflictDrafts: ConflictDraft[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'notice.kind' are incompatible between these types.[39m[22m
+[1m[31m      Type 'string' is not assignable to type '"applied" | "conflict" | "duplicate" | "rejected" | "info"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:140:35:[39m[22m
+[1m[31m[37m      140 │   on(TailingsActions.discardWrite, [32m(state, { commandId }) => {[37m[39m[22m
+[1m[31m          ╵                                    [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, { draftId }: { draftId: string; } & Action<"[Tailings] Resubmit Draft"> & { type: "[Tailings] Resubmit Draft"; }) => { dataset: TailingsDataset; ... 7 more ...; pendingWrites: PendingWrite[]; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Resubmit Draft", (props: { draftId: string; }) => { draftId: string; } & Action<"[Tailings] Resubmit Draft">>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ dataset: TailingsDataset; conflictDrafts: { status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; ... 6 more ...; createdAt: string; }[]; ... 6 more ...; pendingWrites: PendingWrite[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'conflictDrafts' are incompatible between these types.[39m[22m
+[1m[31m      Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; opera[39m[22m[1m[31mtor: string; payload: Record<string, unknown>; ... 4 more ...; createdAt: string; }[]' is not assignable to type 'ConflictDraft[]'.[39m[22m
+[1m[31m        Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: ChainRevision["kind"]; operator: string; payload: Record<string, unknown>; baseVersion: number; headVersion: number; basis: ReviewBasisSnapshot; detail: string; createdAt: string; }' is not assignable to type 'ConflictDraft'.[39m[22m
+[1m[31m          Types of property 'status' are incompatible.[39m[22m
+[1m[31m            Type 'string' is not assignable to type '"已重提" | "待处理" | "已放弃"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:162:36:[39m[22m
+[1m[31m[37m      162 │   on(TailingsActions.resubmitDraft, [32m(state, { draftId }) => {[37m[39m[22m
+[1m[31m          ╵                                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, { draftId }: { draftId: string; } & Action<"[Tailings] Discard Draft"> & { type: "[Tailings] Discard Draft"; }) => { dataset: TailingsDataset; ... 7 more ...; pendingWrites: PendingWrite[]; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Discard Draft", (props: { draftId: string; }) => { draftId: string; } & Action<"[Tailings] Discard Draft">>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ dataset: TailingsDataset; conflictDrafts: { status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; ... 6 more ...; createdAt: string; }[]; ... 6 more ...; pendingWrites: PendingWrite[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'conflictDrafts' are incompatible between these types.[39m[22m
+[1m[31m      Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; operator: string; pa[39m[22m[1m[31myload: Record<string, unknown>; ... 4 more ...; createdAt: string; }[]' is not assignable to type 'ConflictDraft[]'.[39m[22m
+[1m[31m        Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: ChainRevision["kind"]; operator: string; payload: Record<string, unknown>; baseVersion: number; headVersion: number; basis: ReviewBasisSnapshot; detail: string; createdAt: string; }' is not assignable to type 'ConflictDraft'.[39m[22m
+[1m[31m          Types of property 'status' are incompatible.[39m[22m
+[1m[31m            Type 'string' is not assignable to type '"已重提" | "待处理" | "已放弃"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:184:35:[39m[22m
+[1m[31m[37m      184 │   on(TailingsActions.discardDraft, [32m(state, { draftId }) => {[37m[39m[22m
+[1m[31m          ╵                                    [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '() => { dataset: TailingsDataset; selectedAnomalyId: string; pendingWrites: any[]; conflictDrafts: any[]; notice: { kind: string; text: string; }; loading: boolean; error: string; keyword: string; status: Anomaly["status"] | "\u5168\u90E8"; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Reset Demo", () => Action<"[Tailings] Reset Demo">>], { dataset: TailingsDataset; ... 7 more ...; status: AnomalyStatus | "全部"; }, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ dataset: TailingsDataset; selectedAnomalyId: string; pendingWrites: any[]; conflictDrafts: any[]; notice: { kind: string; text: string; }; loading: boolean; error: string; keyword: string; status: AnomalyStatus | "全部"; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'notice.kind' are incompatible between these types.[39m[22m
+[1m[31m      Type 'string' is not assignable to type '"applied" | "conflict" | "duplicate" | "rejected" | "info"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:201:32:[39m[22m
+[1m[31m[37m      201[39m[22m[1m[31m │   on(TailingsActions.resetDemo, [32m() => {[37m[39m[22m
+[1m[31m          ╵                                 [32m~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m

@@ -1,0 +1,46 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[37mApplication bundle generation failed. [5.385 seconds][39m
+[37m[39m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type '{ status: string; attempts: number; updatedAt: string; commandId: string; anomalyId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; operator: string; ... 4 more ...; snapshot: ReviewBasisSnapshot; }[]' is not assignable to type 'PendingWrite[]'.[39m[22m
+[1m[31m  Type '{ status: string; attempts: number; updatedAt: string; commandId: string; anomalyId: string; kind: ChainRevision["kind"]; operator: string; baseVersion: number; payload: Record<string, unknown>; lastError: string; createdAt: string; snapshot: ReviewBasisSnapshot; }' is not assignable to type 'PendingWrite'.[39m[22m
+[1m[31m    Types of property 'status' are incompatible.[39m[22m
+[1m[31m      Type 'string' is not assignable to type '"待发送" | "发送失败"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:139:4:[39m[22m
+[1m[31m[37m      139 │     [32mpendingWrites[37m: state.pendingWrites.map((item) =>[39m[22m
+[1m[31m          ╵     [32m~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m  The expected type comes from property 'pendingWrites' which is declared here on type 'TailingsState'[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:24:2:[39m[22m
+[1m[31m[37m      24 │   [32mpendingWrites[37m: PendingWrite[][39m[22m
+[1m[31m         ╵   [32m~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, { draftId }: { draftId: string; } & Action<"[Tailings] Resubmit Draft"> & { type: "[Tailings] Resubmit Draft"; }) => { dataset: TailingsDataset; ... 7 more ...; pendingWrites: PendingWrite[]; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Resubmit Draft", (props: { draftId: string; }) => { draftId: string; } & Action<"[Tailings] Resubmit Draft">>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ dataset: TailingsDataset; conflictDrafts: { status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处[39m[22m[1m[31m置方案" | "审批处置方案" | "关闭异常" | "意见联动"; ... 6 more ...; createdAt: string; }[]; ... 6 more ...; pendingWrites: PendingWrite[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'conflictDrafts' are incompatible between these types.[39m[22m
+[1m[31m      Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; operator: string; payload: Record<string, unknown>; ... 4 more ...; createdAt: string; }[]' is not assignable to type 'ConflictDraft[]'.[39m[22m
+[1m[31m        Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: ChainRevision["kind"]; operator: string; payload: Record<string, unknown>; baseVersion: number; headVersion: number; basis: ReviewBasisSnapshot; detail: string; createdAt: string; }' is not assignable to type 'ConflictDraft'.[39m[22m
+[1m[31m          Types of property 'status' are incompatible.[39m[22m
+[1m[31m            Type 'string' is not assignable to type '"待处理" | "已重提" | "已放弃"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:171:36:[39m[22m
+[1m[31m[37m      171 │   on(TailingsActions.resubmitDraft, [32m(state, { draftId }) => {[37m[39m[22m
+[1m[31m          ╵                                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '(state: TailingsState, { draftId }: { draftId: string; } & Action<"[Tailings] Discard Draft"> & { type: "[Tailings] Discard Draft"; }) => { dataset: TailingsDataset; ... 7 more ...; pendingWrites: PendingWrite[]; }' is not assignable to parameter of type 'OnReducer<TailingsState, [ActionCreator<"[Tailings] Discard Draft", (props: { draftId: string; }) => { draftId: string; } & Action<"[Tailings] Discard Draft">>], TailingsState, TailingsState>'.[39m[22m
+[1m[31m  Call signature return types '{ dataset: TailingsDataset; conflictDrafts: { status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案"[39m[22m[1m[31m | "关闭异常" | "意见联动"; ... 6 more ...; createdAt: string; }[]; ... 6 more ...; pendingWrites: PendingWrite[]; }' and 'TailingsState' are incompatible.[39m[22m
+[1m[31m    The types of 'conflictDrafts' are incompatible between these types.[39m[22m
+[1m[31m      Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: "应急联动" | "现场复核" | "补充专业意见" | "撤回专业意见" | "提交处置方案" | "审批处置方案" | "关闭异常" | "意见联动"; operator: string; payload: Record<string, unknown>; ... 4 more ...; createdAt: string; }[]' is not assignable to type 'ConflictDraft[]'.[39m[22m
+[1m[31m        Type '{ status: string; id: string; anomalyId: string; commandId: string; kind: ChainRevision["kind"]; operator: string; payload: Record<string, unknown>; baseVersion: number; headVersion: number; basis: ReviewBasisSnapshot; detail: string; createdAt: string; }' is not assignable to type 'ConflictDraft'.[39m[22m
+[1m[31m          Types of property 'status' are incompatible.[39m[22m
+[1m[31m            Type 'string' is not assignable to type '"待处理" | "已重提" | "已放弃"'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/store/tailings.reducer.ts:193:35:[39m[22m
+[1m[31m[37m      193 │   on(TailingsActions.discardDraft, [32m(state, { draftId }) => {[37m[39m[22m
+[1m[31m          ╵                                    [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m

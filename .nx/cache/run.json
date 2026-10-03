@@ -1,8 +1,8 @@
 {
   "run": {
     "command": "nx build tailings-monitor --skip-nx-cache",
-    "startTime": "2026-09-28T17:10:16.290Z",
-    "endTime": "2026-09-28T17:10:21.022Z",
+    "startTime": "2026-10-03T21:42:50.230Z",
+    "endTime": "2026-10-03T21:42:58.699Z",
     "inner": false
   },
   "tasks": [
@@ -10,9 +10,9 @@
       "taskId": "tailings-monitor:build:production",
       "target": "build",
       "projectName": "tailings-monitor",
-      "hash": "15273689729215952271",
-      "startTime": "2026-09-28T17:10:16.338Z",
-      "endTime": "2026-09-28T17:10:21.018Z",
+      "hash": "6568348586638551234",
+      "startTime": "2026-10-03T21:42:50.243Z",
+      "endTime": "2026-10-03T21:42:58.698Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

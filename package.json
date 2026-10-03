@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nx serve tailings-monitor",
     "build": "nx build tailings-monitor --skip-nx-cache",
-    "preview": "nx serve tailings-monitor --configuration=production"
+    "preview": "nx serve tailings-monitor --configuration=production",
+    "test:chain": "tsc --outDir tools/out --target ES2022 --module commonjs --moduleResolution node --skipLibCheck --esModuleInterop tools/version-chain.spec.ts && node tools/out/tools/version-chain.spec.js"
   },
   "dependencies": {
     "@angular/animations": "^19.2.0",

@@ -1,0 +1,210 @@
+/**
+ * 版本链引擎行为验证（纯 Node 脚本，非 Angular 测试套件）：
+ *   npx tsc --outDir tools/out tools/version-chain.spec.ts --target ES2022 --module commonjs --moduleResolution node --skipLibCheck --esModuleInterop
+ *   node tools/out/tools/version-chain.spec.js
+ */
+import { strict as assert } from 'node:assert'
+import { seedDataset } from '../apps/tailings-monitor/src/app/data/seed'
+import {
+  applyReviewWrite,
+  commitConflictDraft,
+  isApplied,
+  retryPendingWrite,
+  stashPendingWrite,
+  type ReviewWrite
+} from '../apps/tailings-monitor/src/app/domain/version-chain'
+import type { ExpertOpinion, FieldReview, TailingsDataset } from '../apps/tailings-monitor/src/app/domain'
+
+let passed = 0
+const check = (name: string, fn: () => void): void => {
+  fn()
+  passed += 1
+  console.log(`  ✓ ${name}`)
+}
+
+const AN01 = 'AN-260929-01'
+const AN02 = 'AN-260929-02'
+let seq = 0
+const write = <K extends ReviewWrite['kind']>(
+  dataset: TailingsDataset,
+  anomalyId: string,
+  kind: K,
+  payload: ReviewWrite<K>['payload'],
+  baseAt?: number
+): ReviewWrite<K> => {
+  seq += 1
+  const anomaly = dataset.anomalies.find((item) => item.id === anomalyId)!
+  return {
+    writeId: `T${seq}`,
+    anomalyId,
+    kind,
+    baseVersion: anomaly.version,
+    payload,
+    operator: '测试审阅人',
+    at: new Date(Date.parse(anomaly.openedAt) + 100000 + (baseAt ?? seq) * 60000).toISOString()
+  } as ReviewWrite<K>
+}
+
+const reviewPayload = (tag: string) => ({
+  review: { id: `FR-T-${tag}`, inspector: '宋立', arrivedAt: '2026-09-29T12:00:00', observed: `观察${tag}`, evidence: `证据${tag}`, reassessment: `评估${tag}` } satisfies Omit<FieldReview, 'version' | 'baseVersion' | 'basisVersion'>
+})
+
+const opinionPayload = (tag: string) => ({
+  opinion: { id: `OP-T-${tag}`, specialist: '测试专家', discipline: '岩土' as const, content: `意见${tag}`, conclusion: '补充证据' as const, createdAt: '2026-09-29T12:05:00' } satisfies Omit<ExpertOpinion, 'baseVersion' | 'withdrawn'>
+})
+
+const planPayload = (owner: string) => ({
+  plan: { id: 'PL-X', action: '加密监测' as const, owner, deadline: '2026-10-01T12:00:00', conditions: '条件内容', emergencyLinked: true }
+})
+
+console.log('1. 同一异常并发保存：先到生效，后到保留冲突草稿且不覆盖签批/审计')
+{
+  let ds = structuredClone(seedDataset)
+  // 审阅人 A、B 同时打开 AN-01（均为 V7，方案待审批）
+  const a = write(ds, AN01, 'field-review', reviewPayload('A'))
+  const b = write(ds, AN01, 'field-review', reviewPayload('B'))
+
+  const ra = applyReviewWrite(ds, a)
+  assert.ok(isApplied(ra), 'A 先到应生效')
+  ds = ra.dataset
+  const afterA = ds.anomalies.find((x) => x.id === AN01)!
+  assert.equal(afterA.version, 8, '先到写入推进到 V8')
+  assert.equal(afterA.fieldReviews[0].baseVersion, 7, '复核记录所见版本为 V7')
+  assert.equal(ds.audit.length, seedDataset.audit.length + 1, '先到只追加一条审计')
+
+  const rb = applyReviewWrite(ds, b)
+  assert.ok(!isApplied(rb) && rb.conflict, 'B 后到应产生冲突草稿')
+  ds = rb.dataset
+  const afterB = ds.anomalies.find((x) => x.id === AN01)!
+  assert.equal(afterB.version, 8, '链版本保持 V8，未被后到写入推进')
+  assert.equal(afterB.fieldReviews.length, afterA.fieldReviews.length, 'A 的复核未被覆盖')
+  assert.equal(afterB.conflictDrafts.length, 1, '保留 1 份冲突草稿')
+  assert.equal(afterB.conflictDrafts[0].baseVersion, 7)
+  assert.equal(afterB.conflictDrafts[0].currentVersion, 8, '草稿记录依据版本 V8')
+  assert.equal(ds.audit.length, seedDataset.audit.length + 1, '冲突不写入审计，已生效审计不被盖掉')
+
+  check('先到版本生效、审计追加；后到旧窗口不覆盖', () => {})
+  check('冲突草稿含所见版本与当前依据版本', () => {})
+
+  // 核对后提交草稿：作为 V9 新版本生效
+  const rc = commitConflictDraft(ds, afterB.conflictDrafts[0].id, '审阅人B', '2026-09-29T13:00:00')
+  assert.ok(isApplied(rc.result), '核对后提交应生效')
+  ds = rc.dataset
+  const afterC = ds.anomalies.find((x) => x.id === AN01)!
+  assert.equal(afterC.version, 9)
+  assert.equal(afterC.conflictDrafts[0].resolved, true, '原草稿标记已处理')
+  check('冲突草稿对照当前版本核对后作为新版本生效', () => {})
+}
+
+console.log('2. 专业意见变动：未执行方案失效重算；执行中保留原依据并追加复核')
+{
+  let ds = structuredClone(seedDataset)
+  const anomaly01 = ds.anomalies.find((x) => x.id === AN01)!
+  // 重大异常 AN-01：应急已联动，方案待审批 → 签批 → 开始执行
+  const approve = applyReviewWrite(ds, write(ds, AN01, 'plan-approve', { approver: '何清', note: '同意' }))
+  assert.ok(isApplied(approve)); ds = approve.dataset
+  const start = applyReviewWrite(ds, write(ds, AN01, 'plan-start', { operator: '何清', note: '开始' }))
+  assert.ok(isApplied(start)); ds = start.dataset
+  const running = ds.anomalies.find((x) => x.id === AN01)!
+  assert.equal(running.plan.lifecycle, '执行中')
+  const basis = running.plan.basis!
+  assert.equal(basis.opinionIds.length, 2, '签批锁定 2 条在案意见')
+
+  // 执行中补充意见：原依据保留 + 自动追加复核
+  const add = applyReviewWrite(ds, write(ds, AN01, 'opinion-add', opinionPayload('执行中')))
+  assert.ok(isApplied(add)); ds = add.dataset
+  const afterAdd = ds.anomalies.find((x) => x.id === AN01)!
+  assert.equal(afterAdd.plan.lifecycle, '执行中', '执行中方案不失效')
+  assert.deepEqual(afterAdd.plan.basis, basis, '执行依据仍是签批时的原依据快照')
+  assert.equal(afterAdd.opinions.length, 3)
+  assert.equal(afterAdd.fieldReviews[0].autoGenerated, true, '自动追加现场复核')
+  assert.equal(afterAdd.fieldReviews[0].basisVersion, running.version, '追加复核指向当时最新链版本')
+  check('执行中补充意见：保留原签批依据，追加复核', () => {})
+
+  // 撤回一条签批依据意见：执行中依旧保留原依据、再追加复核
+  const withdraw = applyReviewWrite(ds, write(ds, AN01, 'opinion-withdraw', { opinionId: 'OP-1', reason: '依据更新' }))
+  assert.ok(isApplied(withdraw)); ds = withdraw.dataset
+  const afterW = ds.anomalies.find((x) => x.id === AN01)!
+  assert.deepEqual(afterW.plan.basis, basis, '撤回意见不改变执行中方案的原依据')
+  assert.equal(afterW.opinions.find((o) => o.id === 'OP-1')!.withdrawn, true)
+  assert.equal(afterW.fieldReviews.filter((r) => r.autoGenerated).length, 2, '再次追加复核')
+  check('执行中撤回意见：留痕撤回，原依据不变，再次追加复核', () => {})
+
+  // AN-02 方案处于待审批（先造一个待审批方案），补充意见 → 立即失效重算
+  let ds2 = structuredClone(seedDataset)
+  // 给 AN-02 准备一个待审批方案（需要复核/责任方/条件齐全）
+  const fr = applyReviewWrite(ds2, write(ds2, AN02, 'field-review', reviewPayload('02')))
+  assert.ok(isApplied(fr)); ds2 = fr.dataset
+  const save = applyReviewWrite(ds2, write(ds2, AN02, 'plan-save', planPayload('调度班')))
+  assert.ok(isApplied(save)); ds2 = save.dataset
+  const pending = ds2.anomalies.find((x) => x.id === AN02)!
+  assert.equal(pending.plan.lifecycle, '待审批')
+  const savedVersion = pending.plan.planVersion
+
+  const add2 = applyReviewWrite(ds2, write(ds2, AN02, 'opinion-add', opinionPayload('未执行')))
+  assert.ok(isApplied(add2)); ds2 = add2.dataset
+  const invalidated = ds2.anomalies.find((x) => x.id === AN02)!
+  assert.equal(invalidated.plan.lifecycle, '待提交', '未执行方案立即失效回到重算')
+  assert.equal(invalidated.plan.owner, '', '草稿清空等待重算')
+  assert.equal(invalidated.status, '原因调查中')
+  assert.equal(invalidated.planHistory.length, 1, '失效方案归档留痕')
+  assert.equal(invalidated.planHistory[0].planVersion, savedVersion)
+  assert.ok(ds2.audit.some((a) => a.action === '方案依据失效重算'), '审计记录失效重算')
+  check('未执行方案在意见补充后立即失效、归档并回到重算', () => {})
+}
+
+console.log('3. 写入失败 → 完整审阅版本恢复重放，且不重复追加结论')
+{
+  let ds = structuredClone(seedDataset)
+  const w = write(ds, AN02, 'field-review', reviewPayload('失败'))
+
+  // 模拟落库失败：版本不入链，完整版本留存
+  ds = stashPendingWrite(ds, w, '网络中断', '2026-09-29T12:00:00')
+  assert.equal(ds.pendingWrites.length, 1)
+  const still = ds.anomalies.find((x) => x.id === AN02)!
+  assert.equal(still.version, 4, '失败写入不推进链版本')
+  check('失败写入不影响已生效数据，完整审阅版本留存', () => {})
+
+  // 首次恢复重放：生效
+  const r1 = retryPendingWrite(ds, w.writeId, '2026-09-29T12:10:00')
+  assert.ok(isApplied(r1.result), '恢复重放应生效')
+  ds = r1.dataset
+  assert.equal(ds.pendingWrites.length, 0, '生效后移出待恢复队列')
+  const v = ds.anomalies.find((x) => x.id === AN02)!
+  assert.equal(v.version, 5)
+  assert.equal(v.fieldReviews.length, 1)
+  check('从完整版本恢复并重放成功', () => {})
+
+  // 再次以同一 writeId 重放（队列外手动构造）：幂等，不重复追加复核/审计
+  const r2 = applyReviewWrite(ds, w)
+  assert.ok(isApplied(r2), '幂等路径仍返回成功')
+  ds = r2.dataset
+  const v2 = ds.anomalies.find((x) => x.id === AN02)!
+  assert.equal(v2.version, 5, '版本不重复推进')
+  assert.equal(v2.fieldReviews.length, 1, '结论只追加一次')
+  assert.equal(ds.audit.filter((a) => a.writeId === w.writeId).length, 1, '审计只追加一次')
+  check('同一写入重放幂等，不重复追加结论', () => {})
+}
+
+console.log('4. 恢复期间他人已先到：重放转为冲突草稿，不覆盖')
+{
+  let ds = structuredClone(seedDataset)
+  const stale = write(ds, AN02, 'field-review', reviewPayload('旧窗口'))
+  ds = stashPendingWrite(ds, stale, '网络中断', '2026-09-29T12:00:00')
+
+  // 恢复前，另一审阅人先提交
+  const other = write(ds, AN02, 'opinion-add', opinionPayload('先到'))
+  const ro = applyReviewWrite(ds, other)
+  assert.ok(isApplied(ro)); ds = ro.dataset
+
+  const rr = retryPendingWrite(ds, stale.writeId, '2026-09-29T12:20:00')
+  assert.ok(!isApplied(rr.result) && rr.result.conflict, '过期重放应转为冲突草稿')
+  ds = rr.dataset
+  assert.equal(ds.pendingWrites.length, 0, '已留冲突即从待恢复队列移除')
+  const a = ds.anomalies.find((x) => x.id === AN02)!
+  assert.equal(a.conflictDrafts.length, 1)
+  assert.equal(a.conflictDrafts[0].writeId, stale.writeId)
+  check('恢复重放遇先到版本：保留冲突草稿而非覆盖', () => {})
+}
+
+console.log(`\n全部通过：${passed} 项断言组`)

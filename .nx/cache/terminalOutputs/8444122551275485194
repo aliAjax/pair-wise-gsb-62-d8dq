@@ -1,0 +1,32 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[37mApplication bundle generation failed. [5.096 seconds][39m
+[37m[39m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'kind' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/pages/anomaly-page.component.ts:29:87:[39m[22m
+[1m[31m[37m      29 │ ...as notice" [class.ok]="notice.[32mkind[37m === 'ok'" [class.warn]="noti...[39m[22m
+[1m[31m         ╵                                  [32m~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'kind' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/pages/anomaly-page.component.ts:29:123:[39m[22m
+[1m[31m[37m      29 │ ...== 'ok'" [class.warn]="notice.[32mkind[37m === 'warn'" [class.error]="n...[39m[22m
+[1m[31m         ╵                                  [32m~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'kind' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/pages/anomaly-page.component.ts:29:162:[39m[22m
+[1m[31m[37m      29 │ ...'warn'" [class.error]="notice.[32mkind[37m === 'error'">{{ notice.text ...[39m[22m
+[1m[31m         ╵                                  [32m~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'text' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    apps/tailings-monitor/src/app/pages/anomaly-page.component.ts:29:190:[39m[22m
+[1m[31m[37m      29 │ ...'" [class.error]="notice.kind === 'error'">{{ notice.[32mtext[37m }}</div>[39m[22m
+[1m[31m         ╵                                                         [32m~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
